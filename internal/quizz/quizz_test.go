@@ -34,7 +34,7 @@ func TestQuizz(t *testing.T) {
 		},
 	}
 
-	quizz := NewQuizStorage(q)
+	quizz := NewQuiz(q)
 
 	u := models.User{
 		Username: "LeM",
@@ -59,7 +59,7 @@ func TestQuizzEmpty(t *testing.T) {
 
 	q := []models.Question{}
 
-	quizz := NewQuizStorage(q)
+	quizz := NewQuiz(q)
 
 	u := models.User{
 		Username: "LeM",
@@ -104,7 +104,7 @@ func TestQuizzPercentile(t *testing.T) {
 		},
 	}
 
-	quizz := NewQuizStorage(q)
+	quizz := NewQuiz(q)
 
 	u := models.User{
 		Username: "M",
@@ -158,7 +158,7 @@ func TestQuizzAnswerNotPresent(t *testing.T) {
 		},
 	}
 
-	quizz := NewQuizStorage(q)
+	quizz := NewQuiz(q)
 
 	u := models.User{
 		Username: "M",

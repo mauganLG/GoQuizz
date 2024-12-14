@@ -2,20 +2,26 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"goquizz/internal/quizz"
 	"goquizz/pkg/models"
+	"log"
 	"net/http"
 )
 
 type Server struct {
-	quizz *quizz.QuizStorage
+	quizz *quizz.Quiz
 }
 
 // NewServer creates a new quiz server
-func NewServer(quizz *quizz.QuizStorage) *Server {
+func NewServer(quizz *quizz.Quiz) (*Server, error) {
+
+	if quizz == nil {
+		return nil, fmt.Errorf("quizz variable not provided")
+	}
 	return &Server{
 		quizz: quizz,
-	}
+	}, nil
 }
 
 // HandleGetQuestions returns all available quiz questions
@@ -52,4 +58,17 @@ func (s *Server) HandleAnswers(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
+}
+
+// SetupRoutes link the route to their handlers
+func (s *Server) SetupRoutes() {
+	http.HandleFunc("/questions", s.HandleGetQuestions)
+	http.HandleFunc("/submit", s.HandleAnswers)
+}
+
+// Start begins the HTTP server
+func (s *Server) Start(port string) error {
+	s.SetupRoutes()
+	log.Printf("Server starting on port %s", port)
+	return http.ListenAndServe(":"+port, nil)
 }

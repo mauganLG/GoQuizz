@@ -5,26 +5,26 @@ import (
 	"goquizz/pkg/models"
 )
 
-type QuizStorage struct {
+type Quiz struct {
 	questions []models.Question
 	users     []models.User
 }
 
 // NewQuizStorage creates a new quiz storage
-func NewQuizStorage(questions []models.Question) *QuizStorage {
-	return &QuizStorage{
+func NewQuiz(questions []models.Question) *Quiz {
+	return &Quiz{
 		questions: questions,
 		users:     []models.User{},
 	}
 }
 
 // GetQuestions returns all available quiz questions
-func (s *QuizStorage) GetQuestions() []models.Question {
+func (s *Quiz) GetQuestions() []models.Question {
 	return s.questions
 }
 
 // SubmitQuiz processes a quiz submission and calculates the result
-func (s *QuizStorage) SubmitAnswers(user models.User) (models.QuizResult, error) {
+func (s *Quiz) SubmitAnswers(user models.User) (models.QuizResult, error) {
 	// Validate submission
 	if len(user.Answers) == 0 {
 		return models.QuizResult{}, fmt.Errorf("no answers submitted")
@@ -59,7 +59,7 @@ func (s *QuizStorage) SubmitAnswers(user models.User) (models.QuizResult, error)
 }
 
 // calculatePercentile determines how the current score compares to previous submissions
-func (s *QuizStorage) calculatePercentile(score int) float32 {
+func (s *Quiz) calculatePercentile(score int) float32 {
 	if len(s.users) < 2 {
 		return 100.0
 	}
