@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"goquizz/internal/quizz"
+	"goquizz/pkg/models"
 	"net/http"
 )
 
@@ -17,6 +18,7 @@ func NewServer(quizz *quizz.QuizStorage) *Server {
 	}
 }
 
+// HandleGetQuestions returns all available quiz questions
 func (s *Server) HandleGetQuestions(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -26,4 +28,28 @@ func (s *Server) HandleGetQuestions(w http.ResponseWriter, r *http.Request) {
 	questions := s.quizz.GetQuestions()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(questions)
+}
+
+// HandleAnswers processes answers submission and returns the result
+func (s *Server) HandleAnswers(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var user models.User
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&user); err != nil {
+		http.Error(w, "Invalid submission", http.StatusBadRequest)
+		return
+	}
+
+	result, err := s.quizz.SubmitAnswers(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result)
 }
