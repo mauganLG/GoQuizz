@@ -71,7 +71,7 @@ func (c *Client) TakeQuiz() {
 		return
 	}
 
-	fmt.Printf("Your answer (enter the question number): ")
+	fmt.Println("Your answer (enter the question number): ")
 	for i := range questionsNumber.Number {
 
 		var answer int

@@ -30,7 +30,7 @@ func TestServerQuestionsEmpty(t *testing.T) {
 
 	var questions []models.Question
 	if err := json.Unmarshal(body, &questions); err != nil {
-		return
+		t.Fatal(err)
 	}
 
 	assert.ElementsMatch(t, []models.Question{}, questions)
@@ -74,7 +74,7 @@ func TestServerQuestions(t *testing.T) {
 
 	var questions []models.Question
 	if err := json.Unmarshal(body, &questions); err != nil {
-		return
+		t.Fatal(err)
 	}
 
 	assert.ElementsMatch(t, questionsQuizz, questions)
@@ -118,7 +118,7 @@ func TestServerLenQuestions(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/questionnumber", nil)
 
 	w := httptest.NewRecorder()
-	s.HandleGetQuestions(w, req)
+	s.HandleLenQuestions(w, req)
 
 	res := w.Result()
 
@@ -128,7 +128,7 @@ func TestServerLenQuestions(t *testing.T) {
 
 	var questionsNumber models.QuestionNumber
 	if err := json.Unmarshal(body, &questionsNumber); err != nil {
-		return
+		t.Fatal(err)
 	}
 
 	qn := models.QuestionNumber{
@@ -143,10 +143,10 @@ func TestServerLenQuestionsEmpty(t *testing.T) {
 	questionsQuizz := []models.Question{}
 	q := quizz.NewQuiz(questionsQuizz)
 	s := NewServer(q)
-	req := httptest.NewRequest(http.MethodGet, "/lenquestions", nil)
+	req := httptest.NewRequest(http.MethodGet, "/questionnumber", nil)
 
 	w := httptest.NewRecorder()
-	s.HandleGetQuestions(w, req)
+	s.HandleLenQuestions(w, req)
 
 	res := w.Result()
 
@@ -156,7 +156,7 @@ func TestServerLenQuestionsEmpty(t *testing.T) {
 
 	var questionsNumber models.QuestionNumber
 	if err := json.Unmarshal(body, &questionsNumber); err != nil {
-		return
+		t.Fatal(err)
 	}
 
 	qn := models.QuestionNumber{
@@ -191,7 +191,7 @@ func TestServerAnswers(t *testing.T) {
 	q := quizz.NewQuiz(questionsQuizz)
 	s := NewServer(q)
 
-	submission := models.User{
+	userW := models.User{
 		Username: "LeW",
 		Answers: map[string]int{
 			"1": 2,
@@ -200,12 +200,12 @@ func TestServerAnswers(t *testing.T) {
 	}
 
 	var b bytes.Buffer
-	err := json.NewEncoder(&b).Encode(submission)
+	err := json.NewEncoder(&b).Encode(userW)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	req := httptest.NewRequest(http.MethodPost, "/sumbit", &b)
+	req := httptest.NewRequest(http.MethodPost, "/submit", &b)
 	w := httptest.NewRecorder()
 	s.HandleGetQuestions(w, req)
 
@@ -215,7 +215,7 @@ func TestServerAnswers(t *testing.T) {
 
 	body, _ := io.ReadAll(res.Body)
 
-	var result []models.QuizResult
+	var result models.QuizResult
 	if err := json.Unmarshal(body, &result); err != nil {
 		return
 	}
@@ -225,8 +225,7 @@ func TestServerAnswers(t *testing.T) {
 		CorrectAnswers: 1,
 		Percentile:     100.0,
 	}
-
-	assert.ElementsMatch(t, expResult, result)
+	assert.Equal(t, expResult, result)
 }
 
 func TestServerAnswers2Users(t *testing.T) {
@@ -269,7 +268,7 @@ func TestServerAnswers2Users(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	req := httptest.NewRequest(http.MethodPost, "/sumbit", &b)
+	req := httptest.NewRequest(http.MethodPost, "/submit", &b)
 	w := httptest.NewRecorder()
 	s.HandleGetQuestions(w, req)
 
@@ -277,14 +276,8 @@ func TestServerAnswers2Users(t *testing.T) {
 
 	res.Body.Close()
 
-	expResult := models.QuizResult{
-		TotalQuestions: 2,
-		CorrectAnswers: 0,
-		Percentile:     0.0,
-	}
-
 	userM := models.User{
-		Username: "LeM",
+		Username: "MLG",
 		Answers:  map[string]int{},
 	}
 
@@ -293,7 +286,7 @@ func TestServerAnswers2Users(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	req = httptest.NewRequest(http.MethodPost, "/sumbit", &b)
+	req = httptest.NewRequest(http.MethodPost, "/submit", &b)
 	w = httptest.NewRecorder()
 	s.HandleGetQuestions(w, req)
 
@@ -303,9 +296,16 @@ func TestServerAnswers2Users(t *testing.T) {
 
 	body, _ := io.ReadAll(res.Body)
 
-	var result []models.QuizResult
+	var result models.QuizResult
 	if err := json.Unmarshal(body, &result); err != nil {
 		return
 	}
-	assert.ElementsMatch(t, expResult, result)
+
+	expResult := models.QuizResult{
+		TotalQuestions: 2,
+		CorrectAnswers: 0,
+		Percentile:     0.0,
+	}
+
+	assert.Equal(t, expResult, result)
 }
