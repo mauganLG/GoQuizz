@@ -80,6 +80,84 @@ func TestServerQuestions(t *testing.T) {
 	assert.ElementsMatch(t, questionsQuizz, questions)
 }
 
+func TestServerLenQuestions(t *testing.T) {
+
+	questionsQuizz := []models.Question{
+		{
+			Id:   1,
+			Text: "animal",
+			Answers: map[string]string{
+				"1": "cat",
+				"2": "dog",
+			},
+			CorrectAnswer: 2,
+		},
+		{
+			Id:   2,
+			Text: "letter",
+			Answers: map[string]string{
+				"1": "a",
+				"2": "b",
+				"3": "c",
+			},
+			CorrectAnswer: 3,
+		},
+		{
+			Id:   3,
+			Text: "malcom",
+			Answers: map[string]string{
+				"1": "yes",
+				"2": "no",
+				"3": "maybe",
+			},
+			CorrectAnswer: 3,
+		},
+	}
+	q := quizz.NewQuiz(questionsQuizz)
+	s := NewServer(q)
+	req := httptest.NewRequest(http.MethodGet, "/lenquestions", nil)
+
+	w := httptest.NewRecorder()
+	s.HandleGetQuestions(w, req)
+
+	res := w.Result()
+
+	defer res.Body.Close()
+
+	body, _ := io.ReadAll(res.Body)
+
+	var lengthquestions int
+	if err := json.Unmarshal(body, &lengthquestions); err != nil {
+		return
+	}
+
+	assert.ElementsMatch(t, 3, lengthquestions)
+}
+
+func TestServerLenQuestionsEmpty(t *testing.T) {
+
+	questionsQuizz := []models.Question{}
+	q := quizz.NewQuiz(questionsQuizz)
+	s := NewServer(q)
+	req := httptest.NewRequest(http.MethodGet, "/lenquestions", nil)
+
+	w := httptest.NewRecorder()
+	s.HandleGetQuestions(w, req)
+
+	res := w.Result()
+
+	defer res.Body.Close()
+
+	body, _ := io.ReadAll(res.Body)
+
+	var lengthquestions int
+	if err := json.Unmarshal(body, &lengthquestions); err != nil {
+		return
+	}
+
+	assert.ElementsMatch(t, 0, lengthquestions)
+}
+
 func TestServerAnswers(t *testing.T) {
 
 	questionsQuizz := []models.Question{

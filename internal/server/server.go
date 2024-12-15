@@ -55,10 +55,22 @@ func (s *Server) HandleAnswers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
+func (s *Server) HandleLenQuestions(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	qLen := len(s.quizz.GetQuestions())
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(qLen)
+}
+
 // SetupRoutes link the route to their handlers
 func (s *Server) SetupRoutes() {
 	http.HandleFunc("/questions", s.HandleGetQuestions)
 	http.HandleFunc("/submit", s.HandleAnswers)
+	http.HandleFunc("/lenquestions", s.HandleLenQuestions)
 }
 
 // Start begins the HTTP server
