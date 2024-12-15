@@ -7,6 +7,7 @@ import (
 	"goquizz/pkg/models"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -22,16 +23,18 @@ func NewClient(url string) *Client {
 }
 
 func (c *Client) GetQuestions() {
+
 	resp, err := http.Get(c.url + "/questions")
 	if err != nil {
-		fmt.Println("Error fetching questions:", err)
+
+		fmt.Fprintf(os.Stderr, "Error fetching questions")
 		return
 	}
 	defer resp.Body.Close()
 
 	var questions []models.Question
 	if err := json.NewDecoder(resp.Body).Decode(&questions); err != nil {
-		fmt.Println("Error decoding questions:", err)
+		fmt.Fprintf(os.Stderr, "Error decoding questions")
 		return
 	}
 
@@ -55,13 +58,27 @@ func (c *Client) TakeQuiz() {
 
 	fmt.Scanln(&username)
 
+	resp, err := http.Get(c.url + "/lenquestions")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error fetching length of questions")
+		return
+	}
+	defer resp.Body.Close()
+
+	var lengthQuestions int
+	if err := json.NewDecoder(resp.Body).Decode(&lengthQuestions); err != nil {
+		fmt.Fprintf(os.Stderr, "Error decoding questions")
+		return
+	}
+
+	fmt.Printf("lengthQuestions :%d\n", lengthQuestions)
 	fmt.Print("Your answer (enter the question number): ")
-	for i := range 2 {
+	for i := range lengthQuestions {
 
 		var answer int
-		fmt.Printf("Question %d\n", i)
+		fmt.Printf("Question %d\n", i+1)
 		fmt.Scanln(&answer)
-		indexStr := strconv.Itoa(i)
+		indexStr := strconv.Itoa(i + 1)
 		userAnswers[indexStr] = answer
 	}
 
