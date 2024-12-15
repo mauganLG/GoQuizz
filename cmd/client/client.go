@@ -40,7 +40,7 @@ func (c *Client) GetQuestions() {
 		fmt.Printf("\n%s\n", q.Text)
 		var sb strings.Builder
 		for id, a := range q.Answers {
-			fmt.Fprintf(&sb, "[%s]. %s ", id, a)
+			fmt.Fprintf(&sb, "%s - [%s] ", id, a)
 		}
 		fmt.Printf("%s\n", sb.String())
 	}
