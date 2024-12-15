@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"goquizz/internal/quizz"
 	"goquizz/pkg/models"
 	"log"
@@ -14,14 +13,10 @@ type Server struct {
 }
 
 // NewServer creates a new quiz server
-func NewServer(quizz *quizz.Quiz) (*Server, error) {
-
-	if quizz == nil {
-		return nil, fmt.Errorf("quizz variable not provided")
-	}
+func NewServer(quizz *quizz.Quiz) *Server {
 	return &Server{
 		quizz: quizz,
-	}, nil
+	}
 }
 
 // HandleGetQuestions returns all available quiz questions

@@ -1,8 +1,8 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
 	"goquizz/internal/quizz"
 	"goquizz/pkg/models"
 	"io"
@@ -13,17 +13,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestServerEmpty(t *testing.T) {
-
-	q := quizz.NewQuiz([]models.Question{})
-	_, err := NewServer(q)
-
-	assert.Error(t, fmt.Errorf(""), err)
-}
 func TestServerQuestionsEmpty(t *testing.T) {
 
 	q := quizz.NewQuiz([]models.Question{})
-	s, _ := NewServer(q)
+	s := NewServer(q)
 	req := httptest.NewRequest(http.MethodGet, "/questions", nil)
 
 	w := httptest.NewRecorder()
@@ -67,7 +60,7 @@ func TestServerQuestions(t *testing.T) {
 		},
 	}
 	q := quizz.NewQuiz(questionsQuizz)
-	s, _ := NewServer(q)
+	s := NewServer(q)
 	req := httptest.NewRequest(http.MethodGet, "/questions", nil)
 
 	w := httptest.NewRecorder()
@@ -85,4 +78,149 @@ func TestServerQuestions(t *testing.T) {
 	}
 
 	assert.ElementsMatch(t, questionsQuizz, questions)
+}
+
+func TestServerAnswers(t *testing.T) {
+
+	questionsQuizz := []models.Question{
+		{
+			Id:   1,
+			Text: "animal",
+			Answers: []map[int]string{
+				{1: "cat"},
+				{2: "dog"},
+			},
+			CorrectAnswer: 2,
+		},
+		{
+			Id:   2,
+			Text: "letter",
+			Answers: []map[int]string{
+				{1: "a"},
+				{2: "b"},
+				{3: "c"},
+			},
+			CorrectAnswer: 3,
+		},
+	}
+	q := quizz.NewQuiz(questionsQuizz)
+	s := NewServer(q)
+
+	submission := models.User{
+		Username: "LeW",
+		Answers: map[int]int{
+			1: 2,
+			2: 2,
+		},
+	}
+
+	var b bytes.Buffer
+	err := json.NewEncoder(&b).Encode(submission)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/sumbit", &b)
+	w := httptest.NewRecorder()
+	s.HandleGetQuestions(w, req)
+
+	res := w.Result()
+
+	defer res.Body.Close()
+
+	body, _ := io.ReadAll(res.Body)
+
+	var result []models.QuizResult
+	if err := json.Unmarshal(body, &result); err != nil {
+		return
+	}
+
+	expResult := models.QuizResult{
+		TotalQuestions: 2,
+		CorrectAnswers: 1,
+		Percentile:     100.0,
+	}
+
+	assert.ElementsMatch(t, expResult, result)
+}
+
+func TestServerAnswers2Users(t *testing.T) {
+
+	questionsQuizz := []models.Question{
+		{
+			Id:   1,
+			Text: "animal",
+			Answers: []map[int]string{
+				{1: "cat"},
+				{2: "dog"},
+			},
+			CorrectAnswer: 2,
+		},
+		{
+			Id:   2,
+			Text: "letter",
+			Answers: []map[int]string{
+				{1: "a"},
+				{2: "b"},
+				{3: "c"},
+			},
+			CorrectAnswer: 3,
+		},
+	}
+	q := quizz.NewQuiz(questionsQuizz)
+	s := NewServer(q)
+
+	userW := models.User{
+		Username: "LeW",
+		Answers: map[int]int{
+			1: 2,
+			2: 2,
+		},
+	}
+
+	var b bytes.Buffer
+	err := json.NewEncoder(&b).Encode(userW)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/sumbit", &b)
+	w := httptest.NewRecorder()
+	s.HandleGetQuestions(w, req)
+
+	res := w.Result()
+
+	res.Body.Close()
+
+	expResult := models.QuizResult{
+		TotalQuestions: 2,
+		CorrectAnswers: 0,
+		Percentile:     0.0,
+	}
+
+	userM := models.User{
+		Username: "LeM",
+		Answers:  map[int]int{},
+	}
+
+	err = json.NewEncoder(&b).Encode(userM)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req = httptest.NewRequest(http.MethodPost, "/sumbit", &b)
+	w = httptest.NewRecorder()
+	s.HandleGetQuestions(w, req)
+
+	res = w.Result()
+
+	defer res.Body.Close()
+
+	body, _ := io.ReadAll(res.Body)
+
+	var result []models.QuizResult
+	if err := json.Unmarshal(body, &result); err != nil {
+		return
+	}
+	assert.ElementsMatch(t, expResult, result)
 }
