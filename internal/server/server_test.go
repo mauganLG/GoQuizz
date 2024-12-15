@@ -115,7 +115,7 @@ func TestServerLenQuestions(t *testing.T) {
 	}
 	q := quizz.NewQuiz(questionsQuizz)
 	s := NewServer(q)
-	req := httptest.NewRequest(http.MethodGet, "/lenquestions", nil)
+	req := httptest.NewRequest(http.MethodGet, "/questionnumber", nil)
 
 	w := httptest.NewRecorder()
 	s.HandleGetQuestions(w, req)
@@ -126,12 +126,16 @@ func TestServerLenQuestions(t *testing.T) {
 
 	body, _ := io.ReadAll(res.Body)
 
-	var lengthquestions int
-	if err := json.Unmarshal(body, &lengthquestions); err != nil {
+	var questionsNumber models.QuestionNumber
+	if err := json.Unmarshal(body, &questionsNumber); err != nil {
 		return
 	}
 
-	assert.ElementsMatch(t, 3, lengthquestions)
+	qn := models.QuestionNumber{
+		Number: 3,
+	}
+
+	assert.Equal(t, qn, questionsNumber)
 }
 
 func TestServerLenQuestionsEmpty(t *testing.T) {
@@ -150,12 +154,15 @@ func TestServerLenQuestionsEmpty(t *testing.T) {
 
 	body, _ := io.ReadAll(res.Body)
 
-	var lengthquestions int
-	if err := json.Unmarshal(body, &lengthquestions); err != nil {
+	var questionsNumber models.QuestionNumber
+	if err := json.Unmarshal(body, &questionsNumber); err != nil {
 		return
 	}
 
-	assert.ElementsMatch(t, 0, lengthquestions)
+	qn := models.QuestionNumber{
+		Number: 0,
+	}
+	assert.Equal(t, qn, questionsNumber)
 }
 
 func TestServerAnswers(t *testing.T) {

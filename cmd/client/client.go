@@ -40,10 +40,10 @@ func (c *Client) GetQuestions() {
 
 	fmt.Println("Here is the quizz")
 	for _, q := range questions {
-		fmt.Printf("\n%s\n", q.Text)
+		fmt.Printf("\n%d- %s\n", q.Id, q.Text)
 		var sb strings.Builder
 		for id, a := range q.Answers {
-			fmt.Fprintf(&sb, "%s - [%s] ", id, a)
+			fmt.Fprintf(&sb, "%s- [%s] ", id, a)
 		}
 		fmt.Printf("%s\n", sb.String())
 	}
@@ -58,22 +58,22 @@ func (c *Client) TakeQuiz() {
 
 	fmt.Scanln(&username)
 
-	resp, err := http.Get(c.url + "/lenquestions")
+	resp, err := http.Get(c.url + "/questionnumber")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error fetching length of questions")
 		return
 	}
 	defer resp.Body.Close()
 
-	var lengthQuestions int
-	if err := json.NewDecoder(resp.Body).Decode(&lengthQuestions); err != nil {
-		fmt.Fprintf(os.Stderr, "Error decoding questions")
+	var questionsNumber models.QuestionNumber
+	if err := json.NewDecoder(resp.Body).Decode(&questionsNumber); err != nil {
+		fmt.Fprintf(os.Stderr, "Error decoding questionsNumber")
 		return
 	}
 
-	fmt.Printf("lengthQuestions :%d\n", lengthQuestions)
+	fmt.Printf("lengthQuestions :%d\n", questionsNumber)
 	fmt.Print("Your answer (enter the question number): ")
-	for i := range lengthQuestions {
+	for i := range questionsNumber.Number {
 
 		var answer int
 		fmt.Printf("Question %d\n", i+1)

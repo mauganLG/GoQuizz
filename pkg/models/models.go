@@ -22,3 +22,8 @@ type QuizResult struct {
 	CorrectAnswers int     `json:"correct_answers"`
 	Percentile     float32 `json:"percentile"`
 }
+
+// QuestionNumber represents the number of question available
+type QuestionNumber struct {
+	Number int
+}

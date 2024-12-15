@@ -7,8 +7,9 @@ import (
 )
 
 type Quiz struct {
-	questions []models.Question
-	users     []models.User
+	questions       []models.Question
+	users           []models.User
+	questionsNumber models.QuestionNumber
 }
 
 // NewQuizStorage creates a new quiz storage
@@ -16,12 +17,20 @@ func NewQuiz(questions []models.Question) *Quiz {
 	return &Quiz{
 		questions: questions,
 		users:     []models.User{},
+		questionsNumber: models.QuestionNumber{
+			Number: len(questions),
+		},
 	}
 }
 
 // GetQuestions returns all available quiz questions
 func (s *Quiz) GetQuestions() []models.Question {
 	return s.questions
+}
+
+// GetQuestions returns the number of question
+func (s *Quiz) QuestionsNumber() models.QuestionNumber {
+	return s.questionsNumber
 }
 
 // SubmitQuiz processes a quiz submission and calculates the result

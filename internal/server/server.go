@@ -70,7 +70,7 @@ func (s *Server) HandleLenQuestions(w http.ResponseWriter, r *http.Request) {
 func (s *Server) SetupRoutes() {
 	http.HandleFunc("/questions", s.HandleGetQuestions)
 	http.HandleFunc("/submit", s.HandleAnswers)
-	http.HandleFunc("/lenquestions", s.HandleLenQuestions)
+	http.HandleFunc("/questionnumber", s.HandleLenQuestions)
 }
 
 // Start begins the HTTP server
