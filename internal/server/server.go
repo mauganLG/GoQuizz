@@ -61,9 +61,8 @@ func (s *Server) HandleLenQuestions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	qLen := len(s.quizz.GetQuestions())
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(qLen)
+	json.NewEncoder(w).Encode(s.quizz.QuestionsNumber())
 }
 
 // SetupRoutes link the route to their handlers
