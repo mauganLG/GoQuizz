@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	serverURL := "http://localhost:8080"
+	serverURL := "http://localhost:8888"
 
 	client := NewClient(serverURL)
 
@@ -18,7 +18,7 @@ func main() {
 	}
 
 	var questionsCmd = &cobra.Command{
-		Use:   "Questions",
+		Use:   "questions",
 		Short: "Get available quiz questions",
 		Run: func(cmd *cobra.Command, args []string) {
 			client.GetQuestions()
@@ -26,7 +26,7 @@ func main() {
 	}
 
 	var takeQuizCmd = &cobra.Command{
-		Use:   "Take",
+		Use:   "take",
 		Short: "Take the quiz",
 		Run: func(cmd *cobra.Command, args []string) {
 			client.TakeQuiz()
