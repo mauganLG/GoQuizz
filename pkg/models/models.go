@@ -2,11 +2,11 @@ package models
 
 // Question represents the question structure
 type Question struct {
-	Id               int              `json:"id"`
-	Text             string           `json:"text"`
-	AlternativeTexts []string         `json:"alternative_texts,omitempty"`
-	Answers          []map[int]string `json:"answers"`
-	CorrectAnswer    int              `json:"correct_answer"`
+	Id               int            `json:"id"`
+	Text             string         `json:"text"`
+	AlternativeTexts []string       `json:"alternative_texts,omitempty"`
+	Answers          map[int]string `json:"answers"`
+	CorrectAnswer    int            `json:"correct_answer"`
 }
 
 // User represents a user's submitted quiz answers

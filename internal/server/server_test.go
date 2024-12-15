@@ -42,19 +42,19 @@ func TestServerQuestions(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: []map[int]string{
-				{1: "cat"},
-				{2: "dog"},
+			Answers: map[int]string{
+				1: "cat",
+				2: "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: []map[int]string{
-				{1: "a"},
-				{2: "b"},
-				{3: "c"},
+			Answers: map[int]string{
+				1: "a",
+				2: "b",
+				3: "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -86,19 +86,19 @@ func TestServerAnswers(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: []map[int]string{
-				{1: "cat"},
-				{2: "dog"},
+			Answers: map[int]string{
+				1: "cat",
+				2: "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: []map[int]string{
-				{1: "a"},
-				{2: "b"},
-				{3: "c"},
+			Answers: map[int]string{
+				1: "a",
+				2: "b",
+				3: "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -150,19 +150,19 @@ func TestServerAnswers2Users(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: []map[int]string{
-				{1: "cat"},
-				{2: "dog"},
+			Answers: map[int]string{
+				1: "cat",
+				2: "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: []map[int]string{
-				{1: "a"},
-				{2: "b"},
-				{3: "c"},
+			Answers: map[int]string{
+				1: "a",
+				2: "b",
+				3: "c",
 			},
 			CorrectAnswer: 3,
 		},
