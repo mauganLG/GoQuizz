@@ -13,22 +13,22 @@ func TestQuizz(t *testing.T) {
 		{
 			Id:   1,
 			Text: "What is the capital of France?",
-			Answers: map[int]string{
-				1: "London",
-				2: "Berlin",
-				3: "Paris",
-				4: "Rome",
+			Answers: map[string]string{
+				"1": "London",
+				"2": "Berlin",
+				"3": "Paris",
+				"4": "Rome",
 			},
 			CorrectAnswer: 3,
 		},
 		{
 			Id:   2,
 			Text: "Which programming language is this quiz built in?",
-			Answers: map[int]string{
-				1: "Python",
-				2: "Go",
-				3: "JavaScript",
-				4: "Java",
+			Answers: map[string]string{
+				"1": "Python",
+				"2": "Go",
+				"3": "JavaScript",
+				"4": "Java",
 			},
 			CorrectAnswer: 2,
 		},
@@ -38,9 +38,9 @@ func TestQuizz(t *testing.T) {
 
 	u := models.User{
 		Username: "LeM",
-		Answers: map[int]int{
-			1: 3,
-			2: 2,
+		Answers: map[string]int{
+			"1": 3,
+			"2": 2,
 		},
 	}
 
@@ -63,9 +63,9 @@ func TestQuizzEmpty(t *testing.T) {
 
 	u := models.User{
 		Username: "LeM",
-		Answers: map[int]int{
-			1: 3,
-			2: 2,
+		Answers: map[string]int{
+			"1": 3,
+			"2": 2,
 		},
 	}
 
@@ -86,19 +86,19 @@ func TestQuizzPercentile(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: map[int]string{
-				1: "cat",
-				2: "dog",
+			Answers: map[string]string{
+				"1": "cat",
+				"2": "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: map[int]string{
-				1: "a",
-				2: "b",
-				3: "c",
+			Answers: map[string]string{
+				"1": "a",
+				"2": "b",
+				"3": "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -108,9 +108,9 @@ func TestQuizzPercentile(t *testing.T) {
 
 	u := models.User{
 		Username: "M",
-		Answers: map[int]int{
-			1: 2,
-			2: 3,
+		Answers: map[string]int{
+			"1": 2,
+			"2": 3,
 		},
 	}
 
@@ -118,9 +118,9 @@ func TestQuizzPercentile(t *testing.T) {
 
 	u = models.User{
 		Username: "W",
-		Answers: map[int]int{
-			1: 1,
-			2: 3,
+		Answers: map[string]int{
+			"1": 1,
+			"2": 3,
 		},
 	}
 
@@ -140,19 +140,19 @@ func TestQuizzAnswerNotPresent(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: map[int]string{
-				1: "cat",
-				2: "dog",
+			Answers: map[string]string{
+				"1": "cat",
+				"2": "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: map[int]string{
-				1: "a",
-				2: "b",
-				3: "c",
+			Answers: map[string]string{
+				"1": "a",
+				"2": "b",
+				"3": "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -162,9 +162,9 @@ func TestQuizzAnswerNotPresent(t *testing.T) {
 
 	u := models.User{
 		Username: "M",
-		Answers: map[int]int{
-			1: 3,
-			2: 3,
+		Answers: map[string]int{
+			"1": 3,
+			"2": 3,
 		},
 	}
 

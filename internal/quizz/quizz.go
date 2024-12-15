@@ -3,6 +3,7 @@ package quizz
 import (
 	"fmt"
 	"goquizz/pkg/models"
+	"strconv"
 )
 
 type Quiz struct {
@@ -33,7 +34,9 @@ func (s *Quiz) SubmitAnswers(user models.User) (models.QuizResult, error) {
 	// Calculate score
 	correctAnswers := 0
 	for _, q := range s.questions {
-		submittedAnswer, ok := user.Answers[q.Id]
+
+		idAnswer := strconv.Itoa(q.Id)
+		submittedAnswer, ok := user.Answers[idAnswer]
 		if !ok {
 			continue
 		}

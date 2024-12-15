@@ -42,19 +42,19 @@ func TestServerQuestions(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: map[int]string{
-				1: "cat",
-				2: "dog",
+			Answers: map[string]string{
+				"1": "cat",
+				"2": "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: map[int]string{
-				1: "a",
-				2: "b",
-				3: "c",
+			Answers: map[string]string{
+				"1": "a",
+				"2": "b",
+				"3": "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -86,19 +86,19 @@ func TestServerAnswers(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: map[int]string{
-				1: "cat",
-				2: "dog",
+			Answers: map[string]string{
+				"1": "cat",
+				"2": "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: map[int]string{
-				1: "a",
-				2: "b",
-				3: "c",
+			Answers: map[string]string{
+				"1": "a",
+				"2": "b",
+				"3": "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -108,9 +108,9 @@ func TestServerAnswers(t *testing.T) {
 
 	submission := models.User{
 		Username: "LeW",
-		Answers: map[int]int{
-			1: 2,
-			2: 2,
+		Answers: map[string]int{
+			"1": 2,
+			"2": 2,
 		},
 	}
 
@@ -150,19 +150,19 @@ func TestServerAnswers2Users(t *testing.T) {
 		{
 			Id:   1,
 			Text: "animal",
-			Answers: map[int]string{
-				1: "cat",
-				2: "dog",
+			Answers: map[string]string{
+				"1": "cat",
+				"2": "dog",
 			},
 			CorrectAnswer: 2,
 		},
 		{
 			Id:   2,
 			Text: "letter",
-			Answers: map[int]string{
-				1: "a",
-				2: "b",
-				3: "c",
+			Answers: map[string]string{
+				"1": "a",
+				"2": "b",
+				"3": "c",
 			},
 			CorrectAnswer: 3,
 		},
@@ -172,9 +172,9 @@ func TestServerAnswers2Users(t *testing.T) {
 
 	userW := models.User{
 		Username: "LeW",
-		Answers: map[int]int{
-			1: 2,
-			2: 2,
+		Answers: map[string]int{
+			"1": 2,
+			"2": 2,
 		},
 	}
 
@@ -200,7 +200,7 @@ func TestServerAnswers2Users(t *testing.T) {
 
 	userM := models.User{
 		Username: "LeM",
-		Answers:  map[int]int{},
+		Answers:  map[string]int{},
 	}
 
 	err = json.NewEncoder(&b).Encode(userM)

@@ -16,16 +16,7 @@ func main() {
 	quizzCmd := &cobra.Command{
 		Use: "The QUIZZ",
 	}
-	var userNameCmd = &cobra.Command{
-		Use:   "Username",
-		Short: "Set up username",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Print("Set up you username")
-			var username string
-			fmt.Scanln(&username)
-			client.SetUpUsername(username)
-		},
-	}
+
 	var questionsCmd = &cobra.Command{
 		Use:   "Questions",
 		Short: "Get available quiz questions",
@@ -42,7 +33,7 @@ func main() {
 		},
 	}
 
-	quizzCmd.AddCommand(userNameCmd, questionsCmd, takeQuizCmd)
+	quizzCmd.AddCommand(questionsCmd, takeQuizCmd)
 
 	if err := quizzCmd.Execute(); err != nil {
 		fmt.Println(err)
