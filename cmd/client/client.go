@@ -7,23 +7,18 @@ import (
 	"goquizz/pkg/models"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 type Client struct {
-	url             string
-	username        string
-	questionsLength int
+	url string
 }
 
 func NewClient(url string) *Client {
 	return &Client{
 		url: url,
 	}
-}
-
-func (c *Client) SetUpUsername(username string) {
-	c.username = username
 }
 
 func (c *Client) GetQuestions() {
@@ -40,8 +35,6 @@ func (c *Client) GetQuestions() {
 		return
 	}
 
-	c.questionsLength = len(questions)
-
 	fmt.Println("Here is the quizz")
 	for _, q := range questions {
 		fmt.Printf("\n%s\n", q.Text)
@@ -55,21 +48,27 @@ func (c *Client) GetQuestions() {
 
 func (c *Client) TakeQuiz() {
 
-	userAnswers := make(map[int]int)
+	userAnswers := make(map[string]int)
+
+	fmt.Print("Your username: ")
+	var username string
+
+	fmt.Scanln(&username)
 
 	fmt.Print("Your answer (enter the question number): ")
-	for i := range c.questionsLength {
+	for i := range 2 {
 
 		var answer int
 		fmt.Printf("Question %d\n", i)
 		fmt.Scanln(&answer)
-		userAnswers[i] = answer
+		indexStr := strconv.Itoa(i)
+		userAnswers[indexStr] = answer
 	}
 
 	// Submit quiz
 	user := models.User{
 		Answers:  userAnswers,
-		Username: c.username,
+		Username: username,
 	}
 
 	jsonData, err := json.Marshal(user)
